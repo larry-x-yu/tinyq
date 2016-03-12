@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Tiny Queue Manager</title>
+	<script type="text/javascript" src="js/tinyq.js"></script>
+    <script type="text/javascript">
+    	//debugger;
+    	var context = window.location.pathname.slice(0, window.location.pathname.indexOf('/', 1));
+		var brokerUrl = window.location.host + context + '/tinyq';
+		
+		if (window.location.protocol == 'http:') {
+			brokerUrl = 'ws://' + brokerUrl;
+		} else {
+			brokerUrl = 'wss://' + brokerUrl;
+		}
+		
+		TinyQ.connect(brokerUrl);
+		
+		TinyQ.subscribe('testTopic', function(topic, message) {
+			debugger;
+			var ul = document.getElementById('receivedMessage');
+			var li = document.createElement("li");
+			li.innerHTML = message;
+			ul.appendChild(li);
+		});
+		
+    </script>
+</head>
+<body>
+
+<input id="topic" name="  topic" type="text" width="30" value="testTopic">
+<input id="msg" name="message" type="text" width="30">
+<button onclick="TinyQ.publish(document.getElementById('topic').value, document.getElementById('msg').value)">Send Message</button>
+<div>
+	<h1>Messages received (topic: testTopic)</h1>
+	<ul id="receivedMessage">
+	</ul>
+</div>
+</body>
+</html>

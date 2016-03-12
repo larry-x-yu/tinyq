@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Server Push</title>
+    <script type="application/javascript">
+        var Chat = {};
+
+        Chat.socket = null;
+
+        Chat.connect = (function(host) {
+            if ('WebSocket' in window) {
+                Chat.socket = new WebSocket(host);
+            } else if ('MozWebSocket' in window) {
+                Chat.socket = new MozWebSocket(host);
+            } else {
+                console.log('Error: WebSocket is not supported by this browser.');
+                return;
+            }
+
+            Chat.socket.onopen = function () {
+                console.log('Info: WebSocket connection opened.');
+/            };
+
+            Chat.socket.onclose = function () {
+                //document.getElementById('chat').onkeydown = null;
+                console.log('Info: WebSocket closed.');
+            };
+
+            Chat.socket.onmessage = function (message) {
+                console.log(message.data);
+            };
+        });
+
+        Chat.initialize = function() {
+            if (window.location.protocol == 'http:') {
+                Chat.connect('ws://' + window.location.host + '/tinyq');
+            } else {
+                Chat.connect('wss://' + window.location.host + '/tinyq');
+            }
+        };
+
+        Chat.sendMessage = (function() {
+            Chat.socket.send(message);
+        });
+
+/*        
+        var Console = {};
+
+        Console.log = (function(message) {
+            var console = document.getElementById('console');
+            var p = document.createElement('p');
+            p.style.wordWrap = 'break-word';
+            p.innerHTML = message;
+            console.appendChild(p);
+            while (console.childNodes.length > 25) {
+                console.removeChild(console.firstChild);
+            }
+            console.scrollTop = console.scrollHeight;
+        });
+*/
+
+        Chat.initialize();
+
+        //Chat.sendMessage();
+        
+    </script>
+</head>
+<body>
+
+<input id="msg" name="message" type="text" width="30">
+<button onclick="Chat.socket.send(document.getElementById('msg').value)">Send Message</button>
+
+</body>
+</html>
