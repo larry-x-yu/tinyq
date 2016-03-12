@@ -1,4 +1,4 @@
-package com.cisco.nms.serverpush.tinyq;
+package org.tinyq;
 
 /*
 * Licensed to the Apache Software Foundation (ASF) under one or more

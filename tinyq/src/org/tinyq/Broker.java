@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.cisco.nms.serverpush.tinyq;
+package org.tinyq;
 
 import java.util.ArrayList;
 import java.util.HashMap;
